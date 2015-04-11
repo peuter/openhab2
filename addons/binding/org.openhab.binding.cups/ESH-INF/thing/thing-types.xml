@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="cups"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+	<bridge-type id="bridge">
+		<label>CUPS server</label>
+		<description>This bridge represents a CUPS printer server.</description>
+		<config-description>
+			<parameter name="host" type="text" required="true">
+				<label>Hostname</label>
+				<description>Hostname or IP address of the CUPS server</description>
+				<default>localhost</default>
+			</parameter>
+			<parameter name="port" type="integer" required="false">
+				<label>Port</label>
+				<description>Port of the CUPS server</description>
+				<default>631</default>
+			</parameter>
+			<parameter name="refreshInterval" type="integer" required="false">
+				<label>Refresh Interval</label>
+				<description>The refresh interval in ms which is used to poll given CUPS server.</description>
+				<default>30000</default>
+			</parameter>
+		</config-description>
+	</bridge-type>
+
+	<thing-type id="printer">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>Printer</label>
+		<description>A Cups Printer</description>
+
+		<channels>
+			<channel id="jobs" typeId="jobs" />
+			<channel id="waitingJobs" typeId="waitingJobs" />
+			<channel id="doneJobs" typeId="doneJobs" />
+		</channels>
+		<config-description>
+			<parameter name="url" type="text"required="true">
+				<label>URL</label>
+				<description>The URL of the printer</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<channel-type id="jobs">
+		<item-type>Number</item-type>
+		<label>Jobs</label>
+		<description>Total number of print jobs on the printer</description>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="waitingJobs">
+		<item-type>Number</item-type>
+		<label>waiting Jobs</label>
+		<description>Number of waiting print jobs on the printer</description>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="doneJobs">
+		<item-type>Number</item-type>
+		<label>done Jobs</label>
+		<description>Number of completed print jobs on the printer</description>
+		<state readOnly="true"></state>
+	</channel-type>
+
+</thing:thing-descriptions>
