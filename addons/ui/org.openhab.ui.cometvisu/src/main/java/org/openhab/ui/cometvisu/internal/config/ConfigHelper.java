@@ -845,7 +845,7 @@ public class ConfigHelper {
 			if (m.matches()) {
 				format = m.group(2);
 				if (format.contains("%d")) {
-					Infowidget infowidget = new Infowidget();
+					Widgetinfo infowidget = new Widgetinfo();
 					Info info = new Info();
 					info.setFormat(format);
 					info.setLayout(createLayout(0));
@@ -856,7 +856,7 @@ public class ConfigHelper {
 							+ ":" + item.getName());
 					info.getAddress().add(address);
 					infowidget.setInfo(info);
-					pagejump.setInfowidget(infowidget);
+					pagejump.setWidgetinfo(infowidget);
 				}
 			}
 
