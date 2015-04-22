@@ -177,7 +177,7 @@ public class ReadResource implements EventBroadcaster {
 
 					if (stateClass!=null) {
 						itemState.state = item.getStateAs(stateClass).toString();
-						logger.info("get state of '{}' as '{}' == '{}'",item,stateClass,itemState.state);
+						logger.trace("get state of '{}' as '{}' == '{}'",item,stateClass,itemState.state);
 					} else {
 						itemState.state = item.getState().toString();
 					}

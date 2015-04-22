@@ -112,7 +112,7 @@ public class CometVisuServlet extends HttpServlet {
 	private static final String MULTIPART_BOUNDARY = "MULTIPART_BYTERANGES";
 
 	private Pattern sitemapPattern = Pattern
-			.compile(".*/visu_config_([^\\.]+)\\.xml");
+			.compile(".*/visu_config_(oh_)?([^\\.]+)\\.xml");
 
 	private String rrsLogPath = "/plugins/rsslog/rsslog_oh.php";
 	private final String rssLogMessageSeparator = "\\|";
@@ -205,10 +205,12 @@ public class CometVisuServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		File requestedFile = getRequestedFile(req);
-		Matcher matcher = sitemapPattern.matcher(req.getPathInfo());
+		
+		String path = req.getPathInfo()!=null ? req.getPathInfo() : "/index.html";
+		Matcher matcher = sitemapPattern.matcher(path);
 		if (!requestedFile.exists() && matcher.find()) {
 
-			Sitemap sitemap = getSitemap(matcher.group(1));
+			Sitemap sitemap = getSitemap(matcher.group(2));
 			if (sitemap != null) {
 				logger.debug("reading sitemap '{}'", sitemap);
 				VisuConfig config = new VisuConfig(sitemap, cometVisuApp,
@@ -227,11 +229,11 @@ public class CometVisuServlet extends HttpServlet {
 		}
 
 		// logger.info("Path: " + req.getPathInfo());
-		if (req.getPathInfo()
+		if (path
 				.matches(".*editor/dataproviders/.+\\.(php|json)$")
-				|| req.getPathInfo().matches(".*designs/get_designs\\.php$")) {
+				|| path.matches(".*designs/get_designs\\.php$")) {
 			dataProviderService(requestedFile, req, resp);
-		} else if (req.getPathInfo().equalsIgnoreCase(rrsLogPath)) {
+		} else if (path.equalsIgnoreCase(rrsLogPath)) {
 			processRssLogRequest(requestedFile, req, resp);
 		} else if (requestedFile.getName().endsWith(".php")) {
 			phpService(requestedFile, req, resp);
@@ -243,8 +245,9 @@ public class CometVisuServlet extends HttpServlet {
 	protected File getRequestedFile(HttpServletRequest req)
 			throws UnsupportedEncodingException {
 		String requestedFile = req.getPathInfo();
-		File file = new File(rootFolder, URLDecoder.decode(requestedFile,
-				"UTF-8"));
+		
+		File file = requestedFile!=null ? new File(rootFolder, URLDecoder.decode(requestedFile,
+				"UTF-8")) : rootFolder;
 		if (file.isDirectory()) {
 			// search for an index file
 			FilenameFilter filter = new FilenameFilter() {

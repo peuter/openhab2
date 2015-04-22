@@ -96,7 +96,7 @@ public class VisuConfig {
 		int requestFolders = req.getPathInfo().substring(1).split("/").length;
 		logger.debug("requestPath '{}' has '{}' parts", req.getPathInfo(),
 				requestFolders);
-		String relXsd = "./";
+		String relXsd = "";
 		for (int i = 1; i < requestFolders; i++) {
 			relXsd += "../";
 		}
