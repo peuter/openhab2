@@ -94,6 +94,10 @@ section {
     background-image: url('img/cometvisu.png');
 }
 
+.link.ui-cometvisu .body {
+    background-image: url('img/cometvisu.png');
+}
+
 .link.rest .body {
     background-image: url('img/restapi.png');
 }.link .footer {
