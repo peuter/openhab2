@@ -17,6 +17,8 @@
 
   <modules>
     <module>binding</module>
+    <module>io</module>
+    <module>ui</module>
   </modules>
 
 </project>
