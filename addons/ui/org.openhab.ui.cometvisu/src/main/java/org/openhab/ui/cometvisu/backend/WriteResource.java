@@ -21,6 +21,7 @@ import org.eclipse.smarthome.core.events.EventPublisher;
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemNotFoundException;
 import org.eclipse.smarthome.core.items.ItemRegistry;
+import org.eclipse.smarthome.core.items.events.ItemEventFactory;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.TypeParser;
 import org.openhab.ui.cometvisu.backend.beans.SuccessBean;
@@ -64,7 +65,7 @@ public class WriteResource {
 					item.getAcceptedCommandTypes(), value);
 			SuccessBean bean = new SuccessBean();
 			if (command != null) {
-				eventPublisher.postCommand(item.getName(), command);
+				eventPublisher.post(ItemEventFactory.createCommandEvent(item.getName(), command));
 				bean.success = 1;
 			} else {
 				bean.success = 0;

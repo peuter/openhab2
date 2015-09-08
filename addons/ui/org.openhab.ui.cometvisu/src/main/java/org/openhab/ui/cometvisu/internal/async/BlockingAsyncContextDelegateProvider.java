@@ -13,10 +13,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openhab.ui.cometvisu.internal.util.SseUtil;
 import org.glassfish.jersey.media.sse.SseFeature;
 import org.glassfish.jersey.servlet.spi.AsyncContextDelegate;
 import org.glassfish.jersey.servlet.spi.AsyncContextDelegateProvider;
-import org.openhab.ui.cometvisu.internal.util.SseUtil;
 
 /**
  * An {@link AsyncContextDelegateProvider} implementation that returns a

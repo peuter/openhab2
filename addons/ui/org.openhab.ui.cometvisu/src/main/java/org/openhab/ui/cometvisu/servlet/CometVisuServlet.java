@@ -43,6 +43,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemNotFoundException;
+import org.eclipse.smarthome.core.items.events.ItemEventFactory;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.persistence.FilterCriteria;
 import org.eclipse.smarthome.core.persistence.HistoricItem;
@@ -313,8 +314,8 @@ public class CometVisuServlet extends HttpServlet {
 							+ rssLogMessageSeparator + items.get(0).getName());
 					// Use the event publisher to store the item in the defined
 					// persistance services
-					cometVisuApp.getEventPublisher().postCommand(
-							items.get(0).getName(), command);
+					cometVisuApp.getEventPublisher().post(
+							ItemEventFactory.createCommandEvent(items.get(0).getName(), command));
 				}
 				// send empty response??
 				response.setContentType("text/plain");
