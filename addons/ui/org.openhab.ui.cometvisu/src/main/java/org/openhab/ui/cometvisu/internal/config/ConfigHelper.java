@@ -803,7 +803,7 @@ public class ConfigHelper {
 			return getIconMapping(ohIcon);
 		} else {
 			// add the oh-icon to the icon definitions
-			if (app.getIconProvider().hasIcon(ohIcon)) {
+			if (app.hasIcon(ohIcon)) {
 				IconDefinition iconDef = factory.createIconDefinition();
 				iconDef.setUri("/images/" + ohIcon + ".png");
 				iconDef.setName("OH_" + ohIcon);
@@ -829,7 +829,7 @@ public class ConfigHelper {
 		Pagejump pagejump = new Pagejump();
 		pagejump.setBindClickToWidget(true);
 		pagejump.setTarget(targetPage.getName());
-		String ohIcon = app.getItemUIRegistry().getIcon(widget);
+		String ohIcon = app.getItemUIRegistry().getCategory(widget);
 		if (NavbarPositionType.TOP.equals(position)
 				|| NavbarPositionType.BOTTOM.equals(position)) {
 			addLabel(pagejump, targetPage.getName(),

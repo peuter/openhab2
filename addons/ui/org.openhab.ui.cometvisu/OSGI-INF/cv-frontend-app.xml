@@ -17,7 +17,7 @@
    <reference bind="setItemUIRegistry" cardinality="1..1" interface="org.eclipse.smarthome.ui.items.ItemUIRegistry" name="ItemUIRegistry" policy="static" unbind="unsetItemUIRegistry"/>
    <reference bind="setItemRegistry" cardinality="1..1" interface="org.eclipse.smarthome.core.items.ItemRegistry" name="ItemRegistry" policy="static" unbind="unsetItemRegistry"/>
    <reference bind="addSitemapProvider" cardinality="0..n" interface="org.eclipse.smarthome.model.sitemap.SitemapProvider" name="SitemapProvider" policy="dynamic" unbind="removeSitemapProvider"/>
-   <reference bind="setIconProvider" cardinality="1..1" interface="org.eclipse.smarthome.ui.icon.IconProvider" name="IconProvider" policy="static" unbind="unsetIconProvider"/>
+   <reference bind="addIconProvider" cardinality="1..n" interface="org.eclipse.smarthome.ui.icon.IconProvider" name="IconProvider" policy="dynamic" unbind="removeIconProvider"/>
    <reference bind="addPersistenceService" cardinality="0..n" interface="org.eclipse.smarthome.core.persistence.PersistenceService" name="PersistenceService" policy="dynamic" unbind="removePersistenceService"/>
    <reference bind="setEventPublisher" cardinality="1..1" interface="org.eclipse.smarthome.core.events.EventPublisher" name="EventPublisher" policy="static" unbind="unsetEventPublisher"/>
    <property name="service.pid" type="String" value="org.openhab.cometvisu"/>
