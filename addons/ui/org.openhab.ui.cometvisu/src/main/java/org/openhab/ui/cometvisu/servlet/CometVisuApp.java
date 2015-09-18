@@ -7,9 +7,7 @@
  */
 package org.openhab.ui.cometvisu.servlet;
 
-import java.io.IOException;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -18,19 +16,17 @@ import java.util.Set;
 
 import javax.servlet.ServletException;
 
-import org.openhab.ui.cometvisu.internal.Config;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
 import org.eclipse.smarthome.core.events.EventPublisher;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.persistence.PersistenceService;
 import org.eclipse.smarthome.core.persistence.QueryablePersistenceService;
 import org.eclipse.smarthome.model.sitemap.SitemapProvider;
 import org.eclipse.smarthome.ui.icon.IconProvider;
+import org.eclipse.smarthome.ui.icon.IconSet.Format;
 import org.eclipse.smarthome.ui.items.ItemUIRegistry;
+import org.openhab.ui.cometvisu.internal.Config;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.slf4j.Logger;
@@ -55,7 +51,7 @@ public class CometVisuApp {
 
 	private Set<SitemapProvider> sitemapProviders = new HashSet<>();
 
-	private IconProvider iconProvider;
+	private Set<IconProvider> iconProviders;
 
 	private EventPublisher eventPublisher;
 
@@ -90,16 +86,21 @@ public class CometVisuApp {
 		return persistenceServices;
 	}
 
-	public IconProvider getIconProvider() {
-		return iconProvider;
+	public boolean hasIcon(String icon) {
+	    for(IconProvider iconProvider : iconProviders) {
+	        if(iconProvider.hasIcon(icon, "classic", Format.PNG) != null) {
+	            return true;
+	        }
+	    }
+		return false;
 	}
 
-	protected void setIconProvider(IconProvider iconProvider) {
-		this.iconProvider = iconProvider;
+	protected void addIconProvider(IconProvider iconProvider) {
+		this.iconProviders.add(iconProvider);
 	}
 
 	protected void unsetIconProvider(IconProvider iconProvider) {
-		this.iconProvider = null;
+		this.iconProviders.remove(iconProvider);
 	}
 
 	protected void setItemRegistry(ItemRegistry itemRegistry) {
