@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="braviatv"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <!-- TV Thing Type -->
+    <thing-type id="BraviaTv">
+        <label>BraviaTv</label>
+        <description>A remote controllable Sony Bravia TV</description>
+
+        <channels>
+            <channel id="command" typeId="command"/>
+        </channels>
+        
+        <config-description>
+            <parameter name="ipAddress" type="text" required="true">
+                <context>network-address</context>
+                <label>IP address</label>
+                <description>The local IP address or hostname of the BraviaTv</description>
+            </parameter>
+            <parameter name="auth" type="text" required="true">
+                <label>Authentication Token</label>
+                <description>A token that identifies the client</description>
+            </parameter>
+        </config-description>
+    </thing-type>
+
+    <!-- Command Channel Type -->
+    <channel-type id="command">
+        <item-type>String</item-type>
+        <label>BraviaTv Command</label>
+        <description>Command channel for BraviaTv Binding</description>
+    </channel-type>
+
+</thing:thing-descriptions>
