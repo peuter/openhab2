@@ -12,7 +12,6 @@ import static org.openhab.binding.braviatv.BraviaTvBindingConstants.*;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.smarthome.config.core.Configuration;
@@ -39,6 +38,7 @@ public class BraviaTvHandler extends BaseThingHandler {
 
     private URL irccUrl;
     private String irccAuth;
+    private String irccPSK;
 
     public BraviaTvHandler(Thing thing) {
         super(thing);
@@ -52,7 +52,7 @@ public class BraviaTvHandler extends BaseThingHandler {
                 String code = cmd.getCode();
                 this.sendUPnPcommand(code);
             } catch (IOException | SAXException e) {
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getLocalizedMessage());
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.toString());
             } catch (IllegalArgumentException e) {
                 logger.error("unknown command " + command);
             }
@@ -65,38 +65,49 @@ public class BraviaTvHandler extends BaseThingHandler {
         Configuration config = getThing().getConfiguration();
         try {
             String ip = (String) config.get(TV_PARAMETER_IP);
-            this.irccUrl = new URL("http://" + URI.create(ip).getHost() + IRCC_PATH);
+            this.irccUrl = new URL("http://" + ip + IRCC_PATH);
             this.irccAuth = (String) config.get(TV_PARAMETER_AUTH);
+            this.irccPSK = (String) config.get(TV_PARAMETER_PSK);
             updateStatus(ThingStatus.ONLINE);
         } catch (MalformedURLException e) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, e.getLocalizedMessage());
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, e.getMessage());
         }
     }
 
-    private void sendUPnPcommand(String code) throws IOException, SAXException {
+    /**
+     * Send command to TV
+     *
+     * see: https://github.com/breunigs/bravia-auth-and-remote.git
+     */
+    private boolean sendUPnPcommand(String code) throws IOException, SAXException {
         StringBuilder soapBody = new StringBuilder();
 
-        soapBody.append("<?xml version=\"1.0\"?>\r\n" + "<SOAP-ENV:Envelope "
-                + "xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" "
-                + "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "<SOAP-ENV:Body>" + "<m:"
+        soapBody.append("<?xml version=\"1.0\"?><s:Envelope " + "xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" "
+                + "s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "<s:Body>" + "<m:"
                 + IRCC_SEND_ACTION + " xmlns:m=\"" + IRCC_SERVICE_ID + "\">" + "<" + IRCC_ARG_KEY + ">" + code + "</"
-                + IRCC_ARG_KEY + ">" + "</m:" + IRCC_SEND_ACTION + ">" + "</SOAP-ENV:Body></SOAP-ENV:Envelope>");
+                + IRCC_ARG_KEY + ">" + "</m:" + IRCC_SEND_ACTION + ">" + "</s:Body></s:Envelope>");
 
         HttpURLConnection conn = (HttpURLConnection) this.irccUrl.openConnection();
 
         conn.setRequestMethod("POST");
         conn.setReadTimeout(HTTP_RECEIVE_TIMEOUT);
         conn.setDoOutput(true);
-        conn.setRequestProperty("Content-Type", "text/xml");
+        conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
         conn.setRequestProperty("SOAPAction", "\"" + IRCC_SERVICE_ID + "#" + IRCC_SEND_ACTION + "\"");
-        conn.setRequestProperty("Cookie", "auth=" + this.irccAuth);
+        if (this.irccAuth.length() > 0) {
+            conn.setRequestProperty("Cookie", "auth=" + this.irccAuth);
+        } else {
+            conn.setRequestProperty("X-Auth-PSK", this.irccPSK);
+        }
         conn.setRequestProperty("Connection", "Close");
 
         byte[] soapBodyBytes = soapBody.toString().getBytes();
+        logger.debug(soapBody.toString());
 
         conn.setRequestProperty("Content-Length", String.valueOf(soapBodyBytes.length));
 
         conn.getOutputStream().write(soapBodyBytes);
         conn.disconnect();
+        return (conn.getResponseCode() == 200);
     }
 }

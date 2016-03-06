@@ -28,6 +28,7 @@ public class BraviaTvBindingConstants {
     // configuration
     public final static String TV_PARAMETER_IP = "ipAddress";
     public final static String TV_PARAMETER_AUTH = "auth";
+    public final static String TV_PARAMETER_PSK = "psk";
 
     // Some definitions for the IRCC service
     public final static String IRCC_SERVICE_ID = "urn:schemas-sony-com:service:IRCC:1";

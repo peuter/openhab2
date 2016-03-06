@@ -19,7 +19,11 @@
                 <label>IP address</label>
                 <description>The local IP address or hostname of the BraviaTv</description>
             </parameter>
-            <parameter name="auth" type="text" required="true">
+            <parameter name="psk" type="text" required="false">
+                <label>Pre-shared-key</label>
+                <description>The connection key set in your TV settings</description>
+            </parameter>
+            <parameter name="auth" type="text" required="false">
                 <label>Authentication Token</label>
                 <description>A token that identifies the client</description>
             </parameter>

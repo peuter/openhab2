@@ -166,4 +166,9 @@
         <configfile finalname="${openhab.conf}/services/cometvisu.cfg" override="false">mvn:${project.groupId}/openhab2-addons-external/${project.version}/cfg/cometvisu</configfile>
     </feature>
 
+    <feature name="openhab-binding-braviatv" description="Bravia TV binding" version="${project.version}">
+        <feature>openhab-runtime-base</feature>
+        <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.braviatv/${project.version}</bundle>
+    </feature>
+
 </features>
