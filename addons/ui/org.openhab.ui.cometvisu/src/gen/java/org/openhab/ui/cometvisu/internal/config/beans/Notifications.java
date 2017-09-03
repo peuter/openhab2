@@ -20,20 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for stylings complex type.
+ * <p>Java class for notifications complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="stylings"&gt;
+ * &lt;complexType name="notifications"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;choice maxOccurs="unbounded" minOccurs="0"&gt;
- *         &lt;element name="styling" type="{}styling_entry"/&gt;
+ *         &lt;element name="state-notification" type="{}state-notification"/&gt;
  *       &lt;/choice&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -43,40 +44,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "stylings", propOrder = {
-    "styling"
+@XmlType(name = "notifications", propOrder = {
+    "stateNotification"
 })
-public class Stylings {
+public class Notifications {
 
-    protected List<StylingEntry> styling;
+    @XmlElement(name = "state-notification")
+    protected List<StateNotification> stateNotification;
 
     /**
-     * Gets the value of the styling property.
+     * Gets the value of the stateNotification property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the styling property.
+     * This is why there is not a <CODE>set</CODE> method for the stateNotification property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getStyling().add(newItem);
+     *    getStateNotification().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link StylingEntry }
+     * {@link StateNotification }
      * 
      * 
      */
-    public List<StylingEntry> getStyling() {
-        if (styling == null) {
-            styling = new ArrayList<StylingEntry>();
+    public List<StateNotification> getStateNotification() {
+        if (stateNotification == null) {
+            stateNotification = new ArrayList<StateNotification>();
         }
-        return this.styling;
+        return this.stateNotification;
     }
 
 }

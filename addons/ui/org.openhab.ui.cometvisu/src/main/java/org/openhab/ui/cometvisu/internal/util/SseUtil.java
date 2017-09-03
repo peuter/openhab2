@@ -24,13 +24,8 @@ public class SseUtil {
 
     /**
      * Creates a new {@link OutboundEvent} object containing an
-     * {@link StateBean} created for the given eventType, objectIdentifier,
-     * eventObject.
+     * {@link StateBean} created for the given eventObject.
      *
-     * @param eventType
-     *            - the event type for the event
-     * @param objectIdentifier
-     *            - the identifier for the main event object
      * @param eventObject
      *            - the eventObject to be included
      * @return a new OutboundEvent.
@@ -43,6 +38,25 @@ public class SseUtil {
         java.util.Date date = new java.util.Date();
         OutboundEvent event = eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE)
                 .data(writer.serialize(eventObject)).id(String.valueOf(date.getTime())).build();
+
+        return event;
+    }
+
+    /**
+     * Creates a new {@link OutboundEvent} object for the given messageName, eventObject.
+     *
+     * @param eventObject
+     *            - the eventObject to be included
+     * @param messageName
+     *            - message name
+     * @return a new OutboundEvent.
+     */
+    public static OutboundEvent buildEvent(Object eventObject, String messageName) {
+
+        OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+        java.util.Date date = new java.util.Date();
+        OutboundEvent event = eventBuilder.name(messageName).mediaType(MediaType.APPLICATION_JSON_TYPE)
+                .data(eventObject).id(String.valueOf(date.getTime())).build();
 
         return event;
     }

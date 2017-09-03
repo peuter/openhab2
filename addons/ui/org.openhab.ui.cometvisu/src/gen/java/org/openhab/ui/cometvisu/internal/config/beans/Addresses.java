@@ -16,7 +16,6 @@
 
 package org.openhab.ui.cometvisu.internal.config.beans;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,20 +26,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for svg complex type.
+ * <p>Java class for addresses complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="svg"&gt;
+ * &lt;complexType name="addresses"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;element name="layout" type="{}layout" minOccurs="0"/&gt;
- *         &lt;element name="label" type="{}label" minOccurs="0"/&gt;
- *         &lt;element name="address" type="{}address" maxOccurs="unbounded"/&gt;
+ *       &lt;sequence maxOccurs="unbounded"&gt;
+ *         &lt;element name="address" type="{}address"/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="refresh" type="{http://www.w3.org/2001/XMLSchema}integer" /&gt;
+ *       &lt;attribute name="value-mapping" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="address-mapping" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -49,67 +47,17 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "svg", propOrder = {
-    "layout",
-    "label",
+@XmlType(name = "addresses", propOrder = {
     "address"
 })
-public class Svg {
+public class Addresses {
 
-    protected Layout layout;
-    protected Label label;
     @XmlElement(required = true)
     protected List<Address> address;
-    @XmlAttribute(name = "refresh")
-    protected BigInteger refresh;
-
-    /**
-     * Gets the value of the layout property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Layout }
-     *     
-     */
-    public Layout getLayout() {
-        return layout;
-    }
-
-    /**
-     * Sets the value of the layout property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Layout }
-     *     
-     */
-    public void setLayout(Layout value) {
-        this.layout = value;
-    }
-
-    /**
-     * Gets the value of the label property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Label }
-     *     
-     */
-    public Label getLabel() {
-        return label;
-    }
-
-    /**
-     * Sets the value of the label property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Label }
-     *     
-     */
-    public void setLabel(Label value) {
-        this.label = value;
-    }
+    @XmlAttribute(name = "value-mapping")
+    protected String valueMapping;
+    @XmlAttribute(name = "address-mapping")
+    protected String addressMapping;
 
     /**
      * Gets the value of the address property.
@@ -141,27 +89,51 @@ public class Svg {
     }
 
     /**
-     * Gets the value of the refresh property.
+     * Gets the value of the valueMapping property.
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public BigInteger getRefresh() {
-        return refresh;
+    public String getValueMapping() {
+        return valueMapping;
     }
 
     /**
-     * Sets the value of the refresh property.
+     * Sets the value of the valueMapping property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public void setRefresh(BigInteger value) {
-        this.refresh = value;
+    public void setValueMapping(String value) {
+        this.valueMapping = value;
+    }
+
+    /**
+     * Gets the value of the addressMapping property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAddressMapping() {
+        return addressMapping;
+    }
+
+    /**
+     * Sets the value of the addressMapping property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAddressMapping(String value) {
+        this.addressMapping = value;
     }
 
 }

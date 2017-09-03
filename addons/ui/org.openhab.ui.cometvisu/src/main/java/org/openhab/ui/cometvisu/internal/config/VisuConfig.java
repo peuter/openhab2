@@ -131,6 +131,14 @@ public class VisuConfig {
         pagesBean.setMeta(meta);
 
         configHelper = new ConfigHelper(pagesBean, app, sitemap.getName());
+
+        if (Config.CLIENT_VERSION != null && Config.isNewer("0.10.0", Config.CLIENT_VERSION)) {
+            logger.debug("client version is '{}' adding openhab plugin", Config.CLIENT_VERSION);
+            Plugin plugin = new Plugin();
+            plugin.setName("openhab");
+            configHelper.addPlugin(plugin);
+        }
+
         createPages(pagesBean);
 
         return marshal(pagesBean, schema.getPath());

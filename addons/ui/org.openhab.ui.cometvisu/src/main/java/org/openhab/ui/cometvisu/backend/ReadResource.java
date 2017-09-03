@@ -35,11 +35,12 @@ import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.io.rest.RESTResource;
 import org.glassfish.jersey.media.sse.EventOutput;
-import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
 import org.openhab.ui.cometvisu.backend.beans.StateBean;
 import org.openhab.ui.cometvisu.internal.Config;
+import org.openhab.ui.cometvisu.internal.SseBroadcaster;
 import org.openhab.ui.cometvisu.internal.listeners.StateEventListener;
+import org.openhab.ui.cometvisu.internal.util.ClientInstaller;
 import org.openhab.ui.cometvisu.internal.util.SseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
 public class ReadResource implements EventBroadcaster, RESTResource {
     private final Logger logger = LoggerFactory.getLogger(ReadResource.class);
 
-    private SseBroadcaster broadcaster = new SseBroadcaster();
+    private SseBroadcaster broadcaster = SseBroadcaster.getInstance();
 
     private final ExecutorService executorService;
 
@@ -164,6 +165,9 @@ public class ReadResource implements EventBroadcaster, RESTResource {
         }
         // listen to state changes of the requested items
         registerItems();
+
+        // check client version
+        ClientInstaller.getInstance().checkVersion();
 
         return eventOutput;
     }

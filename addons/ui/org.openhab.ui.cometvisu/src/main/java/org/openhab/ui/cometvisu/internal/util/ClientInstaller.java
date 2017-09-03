@@ -16,17 +16,20 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.smarthome.io.net.http.HttpUtil;
+import org.openhab.ui.cometvisu.backend.beans.ActionBean;
+import org.openhab.ui.cometvisu.backend.beans.LinkActionBean;
+import org.openhab.ui.cometvisu.backend.beans.NotificationBean;
 import org.openhab.ui.cometvisu.internal.Config;
+import org.openhab.ui.cometvisu.internal.SseBroadcaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +57,6 @@ public class ClientInstaller {
     private static final byte[] buffer = new byte[0xFFFF];
 
     private Map<String, Object> latestRelease;
-
-    /** Regular expression to parse semver version strings */
-    private final Pattern semverPattern = Pattern.compile("[\\D]*([\\d]{1,3})\\.([\\d]{1,3})\\.([\\d]{1,3}).*");
 
     private List<String> alreadyCheckedFolders = new ArrayList<>();
 
@@ -114,30 +114,103 @@ public class ClientInstaller {
                             webFolder.getAbsolutePath());
                 }
             } else {
-                // check for upgrades
-                Map<String, Object> latestRelease = getLatestRelease();
-
-                // find version in local client
-                File version = findClientRoot(webFolder, "version");
-                if (version.exists()) {
-                    try {
-                        String currentVersion = FileUtils.readFileToString(version);
-                        String currentRelease = (String) latestRelease.get("tag_name");
-                        if (currentRelease.startsWith("v")) {
-                            currentRelease = currentRelease.substring(1);
-                        }
-                        if (isNewer(currentRelease, currentVersion)) {
-                            logger.info("CometVisu should be updated to version {}, you are using version {}",
-                                    currentRelease, currentVersion);
-                        }
-                    } catch (IOException e) {
-                        logger.error("error reading version from installed CometVisu client: {}", e.getMessage(), e);
-                    }
-                }
+                checkVersion(webFolder);
             }
         } else {
             logger.error("webfolder {} is no directory", webFolder.getAbsolutePath());
         }
+    }
+
+    /**
+     * Check if currently used CometVisu client version is still up-to-date.
+     * Sends a notification to the client if not.
+     */
+    public void checkVersion() {
+        File webFolder = new File(Config.COMETVISU_WEBFOLDER);
+        if (webFolder.exists() && webFolder.isDirectory()) {
+            checkVersion(webFolder);
+        }
+    }
+
+    /**
+     * Check if currently used CometVisu client version is still up-to-date.
+     * Sends a notification to the client if not
+     *
+     * @param webFolder CometVisu clients web folder
+     */
+    private void checkVersion(File webFolder) {
+
+        // check for upgrades
+        Map<String, Object> latestRelease = getLatestRelease();
+
+        // find version in local client
+        File version = findClientRoot(webFolder, "version");
+        if (version.exists()) {
+            try {
+                String currentVersion = FileUtils.readFileToString(version);
+                Config.CLIENT_VERSION = currentVersion;
+                String currentRelease = (String) latestRelease.get("tag_name");
+                if (currentRelease.startsWith("v")) {
+                    currentRelease = currentRelease.substring(1);
+                }
+                if (Config.isNewer(currentRelease, currentVersion)) {
+                    logger.info("CometVisu should be updated to version {}, you are using version {}", currentRelease,
+                            currentVersion);
+                    sendUpdateNotification(currentRelease, currentVersion);
+                }
+            } catch (IOException e) {
+                logger.error("error reading version from installed CometVisu client: {}", e.getMessage(), e);
+            }
+        }
+    }
+
+    private void sendUpdateNotification(String newVersion, String currentVersion) {
+        // create notification bean
+        LinkActionBean link = new LinkActionBean();
+        link.title = "Start update";
+        link.hidden = true;
+        link.deleteMessageAfterExecution = true;
+        link.url = "/rest/" + Config.COMETVISU_BACKEND_ALIAS + "/" + Config.COMETVISU_BACKEND_CONFIG_ALIAS
+                + "/download-client";
+
+        NotificationBean n = new NotificationBean();
+        n.title = String.format("New Version available");
+        n.message = String.format("CometVisu should be updated to version %s, you are using version %s", newVersion,
+                currentVersion);
+        n.severity = NotificationBean.Severity.low;
+        n.topic = "cv.backend.update";
+        n.unique = true;
+        n.actions = new HashMap<String, ActionBean>();
+        n.actions.put("link", link);
+
+        logger.debug("sending notification about update to client");
+        SseBroadcaster.getInstance().broadcast(SseUtil.buildEvent(n, "notifications"));
+    }
+
+    private void sendUpdatedNotification(String newVersion, int progress) {
+        // create notification bean
+        NotificationBean n = new NotificationBean();
+        n.title = String.format("Updating to version: %s", newVersion);
+
+        if (progress == 100) {
+            n.message = String.format("CometVisu has been succesfully updated.");
+            LinkActionBean link = new LinkActionBean();
+            link.title = "Restart";
+            link.action = "restart";
+            n.actions = new HashMap<String, ActionBean>();
+            n.actions.put("link", link);
+
+        } else {
+            n.icon = "status_light_high";
+            n.iconClasses = "spinner";
+        }
+        n.target = NotificationBean.Target.popup;
+        n.progress = progress;
+        n.severity = NotificationBean.Severity.normal;
+        n.topic = "cv.backend.update";
+        n.unique = true;
+
+        SseBroadcaster.getInstance().broadcast(SseUtil.buildEvent(n, "notifications"));
     }
 
     /**
@@ -182,32 +255,6 @@ public class ClientInstaller {
     }
 
     /**
-     * Compare two SemVer version strings and return true if releaseVersion is newer then currentVersion
-     *
-     * @param releaseVersion {String} e.g 0.11.0
-     * @param currentVersion {String} e.g. 0.10.0
-     * @return {Boolean}
-     */
-    private boolean isNewer(String releaseVersion, String currentVersion) throws NumberFormatException {
-        logger.debug("checking if {} is newer than {}", releaseVersion, currentVersion);
-        Matcher release = semverPattern.matcher(releaseVersion);
-        Matcher current = semverPattern.matcher(currentVersion);
-        if (!release.matches()) {
-            throw new NumberFormatException("release version format error " + releaseVersion);
-        }
-        if (!current.matches()) {
-            throw new NumberFormatException("current version format error " + currentVersion);
-        }
-
-        for (int i = 1; i <= 3; i++) {
-            if (Integer.parseInt(release.group(i)) > Integer.parseInt(current.group(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Fetch the latest release description for the CometVisu project from github
      *
      * @return {Map}
@@ -238,6 +285,7 @@ public class ClientInstaller {
      */
     public void downloadLatestRelease() {
         // request the download URL for the latest CometVisu release from the github API
+        sendUpdatedNotification("requesting...", 0);
         Map<String, Object> latestRelease = getLatestRelease();
         List<Map<String, Object>> assets = (ArrayList<Map<String, Object>>) latestRelease.get("assets");
 
@@ -260,7 +308,15 @@ public class ClientInstaller {
 
                 ZipFile zip = new ZipFile(releaseFile, ZipFile.OPEN_READ);
 
-                extractFolder("cometvisu/release/", zip, Config.COMETVISU_WEBFOLDER);
+                String currentRelease = (String) latestRelease.get("tag_name");
+                if (currentRelease.startsWith("v")) {
+                    currentRelease = currentRelease.substring(1);
+                }
+
+                sendUpdatedNotification(currentRelease, 0);
+                extractFolder("cometvisu/release/", zip, Config.COMETVISU_WEBFOLDER,
+                        (String) latestRelease.get("tag_name"));
+                sendUpdatedNotification(currentRelease, 100);
             } catch (IOException e) {
                 logger.error("error opening release zip file {}", e.getMessage(), e);
             } finally {
@@ -278,16 +334,27 @@ public class ClientInstaller {
      * @param zipFile {ZipFile} zip-file to extract
      * @param destDir {String} destination for the extracted files
      */
-    private void extractFolder(String folderName, ZipFile zipFile, String destDir) {
+    private void extractFolder(String folderName, ZipFile zipFile, String destDir, String release) {
+        List<? extends ZipEntry> fileCollection = Collections.list(zipFile.entries());
+        int total = fileCollection.size();
+        int current = 0;
+        int currentProgress = 0;
         for (ZipEntry entry : Collections.list(zipFile.entries())) {
+            current++;
+            int progress = Math.round(total / 100 * current);
+            if (progress > 0 && progress < 100 && currentProgress != progress) {
+                sendUpdatedNotification(release, progress);
+            }
+            currentProgress = progress;
             if (entry.getName().startsWith(folderName)) {
                 String target = entry.getName().substring(folderName.length());
                 File file = new File(destDir, target);
                 if (entry.isDirectory()) {
                     file.mkdirs();
                 } else {
-                    if (file.exists() && file.getPath().matches(".*/config/visu_config.*\\.xml")) {
-                        // never ever overwrite existing config files
+                    if (file.exists() && (file.getPath().matches(".*/config/visu_config.*\\.xml")
+                            || file.getPath().matches(".*/designs/.+/custom\\.css"))) {
+                        // never ever overwrite existing config or custom.css files
                         continue;
                     }
                     new File(file.getParent()).mkdirs();
@@ -298,6 +365,7 @@ public class ClientInstaller {
                             os.write(buffer, 0, len);
                         }
                         logger.info("extracted zip file {} to folder {}", zipFile.getName(), destDir);
+
                     } catch (IOException e) {
                         logger.error("error extracting file {}", e.getMessage(), e);
                     }

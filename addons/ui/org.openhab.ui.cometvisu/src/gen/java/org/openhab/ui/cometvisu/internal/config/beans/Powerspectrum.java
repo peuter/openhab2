@@ -16,40 +16,40 @@
 
 package org.openhab.ui.cometvisu.internal.config.beans;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for imagetrigger complex type.
+ * <p>Java class for powerspectrum complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="imagetrigger"&gt;
+ * &lt;complexType name="powerspectrum"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="layout" type="{}layout" minOccurs="0"/&gt;
  *         &lt;element name="label" type="{}label" minOccurs="0"/&gt;
- *         &lt;element name="address" type="{}address" maxOccurs="unbounded"/&gt;
+ *         &lt;element name="address" type="{}address" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="src" type="{}uri" /&gt;
- *       &lt;attribute name="suffix" use="required" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="width" type="{}dimension" /&gt;
- *       &lt;attribute name="height" type="{}dimension" /&gt;
- *       &lt;attribute name="refresh" type="{http://www.w3.org/2001/XMLSchema}decimal" /&gt;
- *       &lt;attribute ref="{}mapping"/&gt;
- *       &lt;attribute name="sendValue" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute ref="{}flavour"/&gt;
- *       &lt;attribute ref="{}bind_click_to_widget"/&gt;
+ *       &lt;attribute name="showlegend" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
+ *       &lt;attribute name="singlephase" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
+ *       &lt;attribute name="spectrumonly" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
+ *       &lt;attribute name="limitname" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="limitcolor" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="name1" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="color1" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="name2" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="color2" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="name3" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="color3" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -58,37 +58,40 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "imagetrigger", propOrder = {
+@XmlType(name = "powerspectrum", propOrder = {
     "layout",
     "label",
     "address"
 })
-public class Imagetrigger {
+public class Powerspectrum {
 
     protected Layout layout;
     protected Label label;
-    @XmlElement(required = true)
     protected List<Address> address;
-    @XmlAttribute(name = "src")
-    protected String src;
-    @XmlAttribute(name = "suffix", required = true)
-    protected String suffix;
     @XmlAttribute(name = "type")
     protected String type;
-    @XmlAttribute(name = "width")
-    protected String width;
-    @XmlAttribute(name = "height")
-    protected String height;
-    @XmlAttribute(name = "refresh")
-    protected BigDecimal refresh;
-    @XmlAttribute(name = "mapping")
-    protected String mapping;
-    @XmlAttribute(name = "sendValue")
-    protected String sendValue;
-    @XmlAttribute(name = "flavour")
-    protected String flavour;
-    @XmlAttribute(name = "bind_click_to_widget")
-    protected Boolean bindClickToWidget;
+    @XmlAttribute(name = "showlegend")
+    protected Boolean showlegend;
+    @XmlAttribute(name = "singlephase")
+    protected Boolean singlephase;
+    @XmlAttribute(name = "spectrumonly")
+    protected Boolean spectrumonly;
+    @XmlAttribute(name = "limitname")
+    protected String limitname;
+    @XmlAttribute(name = "limitcolor")
+    protected String limitcolor;
+    @XmlAttribute(name = "name1")
+    protected String name1;
+    @XmlAttribute(name = "color1")
+    protected String color1;
+    @XmlAttribute(name = "name2")
+    protected String name2;
+    @XmlAttribute(name = "color2")
+    protected String color2;
+    @XmlAttribute(name = "name3")
+    protected String name3;
+    @XmlAttribute(name = "color3")
+    protected String color3;
 
     /**
      * Gets the value of the layout property.
@@ -168,54 +171,6 @@ public class Imagetrigger {
     }
 
     /**
-     * Gets the value of the src property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSrc() {
-        return src;
-    }
-
-    /**
-     * Sets the value of the src property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSrc(String value) {
-        this.src = value;
-    }
-
-    /**
-     * Gets the value of the suffix property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSuffix() {
-        return suffix;
-    }
-
-    /**
-     * Sets the value of the suffix property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSuffix(String value) {
-        this.suffix = value;
-    }
-
-    /**
      * Gets the value of the type property.
      * 
      * @return
@@ -240,171 +195,267 @@ public class Imagetrigger {
     }
 
     /**
-     * Gets the value of the width property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getWidth() {
-        return width;
-    }
-
-    /**
-     * Sets the value of the width property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setWidth(String value) {
-        this.width = value;
-    }
-
-    /**
-     * Gets the value of the height property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHeight() {
-        return height;
-    }
-
-    /**
-     * Sets the value of the height property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHeight(String value) {
-        this.height = value;
-    }
-
-    /**
-     * Gets the value of the refresh property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getRefresh() {
-        return refresh;
-    }
-
-    /**
-     * Sets the value of the refresh property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setRefresh(BigDecimal value) {
-        this.refresh = value;
-    }
-
-    /**
-     * Gets the value of the mapping property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMapping() {
-        return mapping;
-    }
-
-    /**
-     * Sets the value of the mapping property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMapping(String value) {
-        this.mapping = value;
-    }
-
-    /**
-     * Gets the value of the sendValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSendValue() {
-        return sendValue;
-    }
-
-    /**
-     * Sets the value of the sendValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSendValue(String value) {
-        this.sendValue = value;
-    }
-
-    /**
-     * Gets the value of the flavour property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFlavour() {
-        return flavour;
-    }
-
-    /**
-     * Sets the value of the flavour property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFlavour(String value) {
-        this.flavour = value;
-    }
-
-    /**
-     * Gets the value of the bindClickToWidget property.
+     * Gets the value of the showlegend property.
      * 
      * @return
      *     possible object is
      *     {@link Boolean }
      *     
      */
-    public Boolean isBindClickToWidget() {
-        return bindClickToWidget;
+    public Boolean isShowlegend() {
+        return showlegend;
     }
 
     /**
-     * Sets the value of the bindClickToWidget property.
+     * Sets the value of the showlegend property.
      * 
      * @param value
      *     allowed object is
      *     {@link Boolean }
      *     
      */
-    public void setBindClickToWidget(Boolean value) {
-        this.bindClickToWidget = value;
+    public void setShowlegend(Boolean value) {
+        this.showlegend = value;
+    }
+
+    /**
+     * Gets the value of the singlephase property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isSinglephase() {
+        return singlephase;
+    }
+
+    /**
+     * Sets the value of the singlephase property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setSinglephase(Boolean value) {
+        this.singlephase = value;
+    }
+
+    /**
+     * Gets the value of the spectrumonly property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isSpectrumonly() {
+        return spectrumonly;
+    }
+
+    /**
+     * Sets the value of the spectrumonly property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setSpectrumonly(Boolean value) {
+        this.spectrumonly = value;
+    }
+
+    /**
+     * Gets the value of the limitname property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLimitname() {
+        return limitname;
+    }
+
+    /**
+     * Sets the value of the limitname property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLimitname(String value) {
+        this.limitname = value;
+    }
+
+    /**
+     * Gets the value of the limitcolor property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLimitcolor() {
+        return limitcolor;
+    }
+
+    /**
+     * Sets the value of the limitcolor property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLimitcolor(String value) {
+        this.limitcolor = value;
+    }
+
+    /**
+     * Gets the value of the name1 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName1() {
+        return name1;
+    }
+
+    /**
+     * Sets the value of the name1 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName1(String value) {
+        this.name1 = value;
+    }
+
+    /**
+     * Gets the value of the color1 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getColor1() {
+        return color1;
+    }
+
+    /**
+     * Sets the value of the color1 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setColor1(String value) {
+        this.color1 = value;
+    }
+
+    /**
+     * Gets the value of the name2 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName2() {
+        return name2;
+    }
+
+    /**
+     * Sets the value of the name2 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName2(String value) {
+        this.name2 = value;
+    }
+
+    /**
+     * Gets the value of the color2 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getColor2() {
+        return color2;
+    }
+
+    /**
+     * Sets the value of the color2 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setColor2(String value) {
+        this.color2 = value;
+    }
+
+    /**
+     * Gets the value of the name3 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName3() {
+        return name3;
+    }
+
+    /**
+     * Sets the value of the name3 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName3(String value) {
+        this.name3 = value;
+    }
+
+    /**
+     * Gets the value of the color3 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getColor3() {
+        return color3;
+    }
+
+    /**
+     * Sets the value of the color3 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setColor3(String value) {
+        this.color3 = value;
     }
 
 }

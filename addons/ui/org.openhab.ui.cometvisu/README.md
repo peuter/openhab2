@@ -248,6 +248,7 @@ For every change in the CometVisu XSD-schema the JAXB auto-generation job must b
 
 * copy the new visu_config.xsd to src/main/resources/
 * and call `mvn jaxb2:xjc`
+* run `mvn license:format` (in repositories root directory) to fix the headers of the auto-generated source files
 
 ## TODO
 

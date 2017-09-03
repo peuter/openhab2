@@ -23,19 +23,27 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for widgetaction complex type.
+ * <p>Java class for mobilemenu complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="widgetaction"&gt;
+ * &lt;complexType name="mobilemenu"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;choice&gt;
- *           &lt;group ref="{}Infoaction_WidgetActions"/&gt;
- *         &lt;/choice&gt;
- *       &lt;/sequence&gt;
+ *       &lt;choice&gt;
+ *         &lt;element name="switch" type="{}switch"/&gt;
+ *         &lt;element name="text" type="{}text"/&gt;
+ *         &lt;element name="toggle" type="{}toggle"/&gt;
+ *         &lt;element name="trigger" type="{}trigger"/&gt;
+ *         &lt;element name="pushbutton" type="{}pushbutton"/&gt;
+ *         &lt;element name="urltrigger" type="{}urltrigger"/&gt;
+ *         &lt;element name="multitrigger" type="{}multitrigger"/&gt;
+ *         &lt;element name="image" type="{}image"/&gt;
+ *         &lt;element name="imagetrigger" type="{}imagetrigger"/&gt;
+ *         &lt;element name="pagejump" type="{}pagejump"/&gt;
+ *         &lt;element name="info" type="{}info"/&gt;
+ *       &lt;/choice&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -44,8 +52,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "widgetaction", propOrder = {
+@XmlType(name = "mobilemenu", propOrder = {
     "_switch",
+    "text",
     "toggle",
     "trigger",
     "pushbutton",
@@ -56,10 +65,11 @@ import javax.xml.bind.annotation.XmlType;
     "pagejump",
     "info"
 })
-public class Widgetaction {
+public class Mobilemenu {
 
     @XmlElement(name = "switch")
     protected Switch _switch;
+    protected Text text;
     protected Toggle toggle;
     protected Trigger trigger;
     protected Pushbutton pushbutton;
@@ -92,6 +102,30 @@ public class Widgetaction {
      */
     public void setSwitch(Switch value) {
         this._switch = value;
+    }
+
+    /**
+     * Gets the value of the text property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Text }
+     *     
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Sets the value of the text property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Text }
+     *     
+     */
+    public void setText(Text value) {
+        this.text = value;
     }
 
     /**

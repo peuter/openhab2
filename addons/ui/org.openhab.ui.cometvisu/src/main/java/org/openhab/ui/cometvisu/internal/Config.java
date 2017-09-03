@@ -10,6 +10,8 @@ package org.openhab.ui.cometvisu.internal;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.smarthome.config.core.ConfigConstants;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
@@ -50,6 +52,8 @@ public class Config {
 
     public static String COMETVISU_WEBAPP_USERFILE_FOLDER = File.separator + "cometvisu";
 
+    public static String CLIENT_VERSION;
+
     /*
      * path of the cometvisu backend (automatically prefixed by /rest/)
      * all the backend aliases must not be changed as they are hard coded in the CometVisu client
@@ -65,6 +69,9 @@ public class Config {
     public static Hashtable<String, Object> iconMappings = new Hashtable<String, Object>();
 
     public static Hashtable<String, Hashtable<String, Object>> configMappings = new Hashtable<String, Hashtable<String, Object>>();
+
+    /** Regular expression to parse semver version strings */
+    private static final Pattern semverPattern = Pattern.compile("[\\D]*([\\d]{1,3})\\.([\\d]{1,3})\\.([\\d]{1,3}).*");
 
     /**
      * maps CometVise address transform to State class
@@ -85,6 +92,31 @@ public class Config {
         itemTypeMapper.put("time", DateTimeType.class);
         itemTypeMapper.put("color", HSBType.class);
         itemTypeMapper.put("location", PointType.class);
+    }
+
+    /**
+     * Compare two SemVer version strings and return true if releaseVersion is newer then currentVersion
+     *
+     * @param releaseVersion {String} e.g 0.11.0
+     * @param currentVersion {String} e.g. 0.10.0
+     * @return {Boolean}
+     */
+    public static boolean isNewer(String releaseVersion, String currentVersion) throws NumberFormatException {
+        Matcher release = semverPattern.matcher(releaseVersion);
+        Matcher current = semverPattern.matcher(currentVersion);
+        if (!release.matches()) {
+            throw new NumberFormatException("release version format error " + releaseVersion);
+        }
+        if (!current.matches()) {
+            throw new NumberFormatException("current version format error " + currentVersion);
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            if (Integer.parseInt(release.group(i)) > Integer.parseInt(current.group(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

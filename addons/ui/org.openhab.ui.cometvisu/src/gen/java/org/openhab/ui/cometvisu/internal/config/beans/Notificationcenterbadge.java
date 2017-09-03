@@ -23,24 +23,22 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for video complex type.
+ * <p>Java class for notificationcenterbadge complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="video"&gt;
+ * &lt;complexType name="notificationcenterbadge"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="layout" type="{}layout" minOccurs="0"/&gt;
  *         &lt;element name="label" type="{}label" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="src" use="required" type="{}uri" /&gt;
- *       &lt;attribute name="width" type="{}dimension" /&gt;
- *       &lt;attribute name="height" type="{}dimension" /&gt;
- *       &lt;attribute name="autoplay" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute ref="{}align"/&gt;
  *       &lt;attribute ref="{}flavour"/&gt;
  *       &lt;attribute ref="{}class"/&gt;
+ *       &lt;attribute name="hide-when-empty" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -49,26 +47,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "video", propOrder = {
+@XmlType(name = "notificationcenterbadge", propOrder = {
     "layout",
     "label"
 })
-public class Video {
+public class Notificationcenterbadge {
 
     protected Layout layout;
     protected Label label;
-    @XmlAttribute(name = "src", required = true)
-    protected String src;
-    @XmlAttribute(name = "width")
-    protected String width;
-    @XmlAttribute(name = "height")
-    protected String height;
-    @XmlAttribute(name = "autoplay")
-    protected String autoplay;
+    @XmlAttribute(name = "align")
+    protected String align;
     @XmlAttribute(name = "flavour")
     protected String flavour;
     @XmlAttribute(name = "class")
     protected String clazz;
+    @XmlAttribute(name = "hide-when-empty")
+    protected Boolean hideWhenEmpty;
 
     /**
      * Gets the value of the layout property.
@@ -119,99 +113,27 @@ public class Video {
     }
 
     /**
-     * Gets the value of the src property.
+     * Gets the value of the align property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getSrc() {
-        return src;
+    public String getAlign() {
+        return align;
     }
 
     /**
-     * Sets the value of the src property.
+     * Sets the value of the align property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setSrc(String value) {
-        this.src = value;
-    }
-
-    /**
-     * Gets the value of the width property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getWidth() {
-        return width;
-    }
-
-    /**
-     * Sets the value of the width property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setWidth(String value) {
-        this.width = value;
-    }
-
-    /**
-     * Gets the value of the height property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHeight() {
-        return height;
-    }
-
-    /**
-     * Sets the value of the height property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHeight(String value) {
-        this.height = value;
-    }
-
-    /**
-     * Gets the value of the autoplay property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAutoplay() {
-        return autoplay;
-    }
-
-    /**
-     * Sets the value of the autoplay property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAutoplay(String value) {
-        this.autoplay = value;
+    public void setAlign(String value) {
+        this.align = value;
     }
 
     /**
@@ -260,6 +182,30 @@ public class Video {
      */
     public void setClazz(String value) {
         this.clazz = value;
+    }
+
+    /**
+     * Gets the value of the hideWhenEmpty property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isHideWhenEmpty() {
+        return hideWhenEmpty;
+    }
+
+    /**
+     * Sets the value of the hideWhenEmpty property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setHideWhenEmpty(Boolean value) {
+        this.hideWhenEmpty = value;
     }
 
 }
